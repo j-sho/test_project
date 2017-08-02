@@ -5,7 +5,12 @@ import Form from '@/components/Form'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
+    {
+      path: '/',
+      redirect: '/form'
+    },
     {
       path: '/form',
       name: 'Form',
