@@ -5,13 +5,15 @@
     </div>
     <br>
     <hr>
-    <div class="block_item">
-      <h2>Выбор домена</h2>
-      <p>Рекомендуем регистрировать почту вида i@имя-фамилия.ru, для этого нам нужны ваши имя и фамилия. Мы проверим доступность домена и зарегистрируем его, если он свободен. Если домен занят, мы предложим варианты и утвердим с вами выбор.</p>
-    </div>
+    <FormBlock>
+      <div slot="block-body">
+        <h2>Выбор домена</h2>
+        <p>Рекомендуем регистрировать почту вида i@имя-фамилия.ru, для этого нам нужны ваши имя и фамилия. Мы проверим доступность домена и зарегистрируем его, если он свободен. Если домен занят, мы предложим варианты и утвердим с вами выбор.</p>
+      </div>
+    </FormBlock>
     <hr>
     <form>
-    <div class="block_item" v-on:click="changeDivColor" v-bind:style="{ 'background-color': isActiveColor }">
+    <div class="block_item">
       <label for="name"><h4>Полное имя для домена<span class="form-required"> *</span></h4></label>
       <div class="row">
         <div class="col-md-3">
@@ -37,7 +39,8 @@
         Поле обязательно для заполнения
       </div>
     </div>
-    <div class="block_item" v-on:click="changeDivColor" v-bind:style="{ 'background-color': isActiveColor }">
+
+    <div class="block_item">
       <label for="domain_name_type"><h4>Домен</h4></label>
       <div>
         <div class="form-check">
@@ -61,7 +64,8 @@
         </div>
       </div>
     </div>
-    <div class="block_item" @click="changeDivColor" v-bind:class="{ active: isActive }">
+
+    <div class="block_item">
       <label for="personal_web">
         <h4>Сделать для вас простую страницу с вашим именем на вашем домене?</h4>
       </label><br>
@@ -72,13 +76,17 @@
         </label>
       </div>
     </div>
+
     <hr>
+
     <div class="block_item">
       <h2>Настройки безопасности</h2>
       <p>Почта — ключ ко всем вашим данным и сервисам в интернете. Потеря доступа к почте может привести к большим финансовым и репутационным потерям. Мы рекомендуем настроить дополнительные опции безопасности.</p>
     </div>
+
     <hr>
-    <div class="block_item" @click="changeDivColor" v-bind:class="{ active: isActive }">
+
+    <div class="block_item">
       <label for="security_enter_option">
         <h4>Какие способы защиты настроить?</h4>
       </label><br>
@@ -101,7 +109,8 @@
         </label>
       </div>
     </div>
-    <div class="block_item" @click="changeDivColor" v-bind:class="{ active: isActive }">
+
+    <div class="block_item">
       <label for="laptop_audit">
         <h4>Провести аудит безопасности вашего компьютера?</h4>
       </label><br>
@@ -118,12 +127,15 @@
         <div class="glyphicon glyphicon-triangle-left description_arrow"></div>
       </div>
     </div>
+
     <hr>
+
     <div class="block_item">
       <h2>Настройка устройств для работы с почтой</h2>
       <p>Скажите нам, какие телефоны и компьютеры настроить для работы с почтой. Мы настроим почту везде.</p>
     </div>
-    <div class="block_item" @click="changeDivColor" v-bind:class="{ active: isActive }">
+
+    <div class="block_item">
       <label for="entry_options"><h4>Опции входа<span class="form-required"> *</span></h4></label><br>
       <div class="form-check">
         <label class="form-check-label">
@@ -153,7 +165,8 @@
         Поле обязательно для заполнения
       </div>
     </div>
-    <div class="block_item" @click="changeDivColor" v-bind:class="{ active: isActive }">
+
+    <div class="block_item">
       <label for="installation"><h4>Как вы хотите настроить почту?<span class="form-required"> *</span></h4></label><br>
       <div>
         <div class="form-check">
@@ -228,7 +241,6 @@
         </div>
       </div>
     </div>
-
     </form>
   </div>
 </template>
@@ -236,31 +248,12 @@
 <script>
 import Vue from 'vue'
 import model from '../Module.js'
-import isActive from '../eventHandling/isActive'
+import FormBlock from './FormBlock'
 
 export default {
   components: {
-    isActive
-  },
-  data () {
-    return {
-      isActive: false,
-      isActiveColor: '#fff'
-    }
-  },
-  methods: {
-    changeDivColor: function() {
-      if (this.isActiveColor === '#fff') {
-        // this.isActive = true;
-        this.isActiveColor = '#ffffe0';
-      } else {
-        // this.isActive = false;
-        this.isActiveColor = '#fff';
-        }
-    }
+    FormBlock
   }
-
-
 }
 </script>
 
@@ -306,10 +299,6 @@ export default {
   top: -15px;
   color: #ccc;
   font-size: 30px;
-}
-
-.block_item {
-  padding: 12px 20px;
 }
 
 h1 {
