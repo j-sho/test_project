@@ -13,14 +13,17 @@
     <form>
 
     <FormBlock v-bind:class='{ "error-style": isNameShowError || isNameShowValidError }'>
-    <div slot="block-body">
-      <label for="name"><h4>Полное имя для домена<span class="form-required"> *</span></h4></label>
-      <div slot="description-item" class="description">
-        <div class="description_text">
-          <p>На русском или <br> английском языках</p>
-        </div>
-        <div class="glyphicon glyphicon-triangle-left description_arrow_small"></div>
+    <div slot="description-item" class="description">
+      <div class="description_text">
+        <p>На русском или <br> английском языках</p>
       </div>
+      <div class="glyphicon glyphicon-triangle-left description_arrow_small"></div>
+    </div>
+    <div slot="block-body">
+      <label for="name">
+        <h4>Полное имя для домена<span class="form-required"> *</span></h4>
+      </label>
+
       <div class="row">
         <div class="col-md-3">
           <span class="md-form">
