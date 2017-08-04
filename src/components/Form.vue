@@ -60,22 +60,22 @@
       </div>
     </div>
     </FormBlock>
-    <FormBlock v-bind:class='{ "error-style": !domain_name || !isDomainValid }' v-show="domain_name_standart === 'false'">
+    <FormBlock v-bind:class='{ "error-style": domain_name_active && (!domain_name || !isDomainValid) }' v-show="domain_name_standart === 'false'">
     <div slot="block-body">
       <div class="domain_name_option">
         <label for="domain_name"><h4>Предпочитаемый домен<span class="form-required"> *</span></h4></label><br>
         <div class="col-md-4 domain-name-input">
           <span class="md-form">
-            <input type="text" id="domain_name" name="domain_name" class="form-control" v-model="domain_name" placeholder="Домен">
+            <input type="text" id="domain_name" name="domain_name" class="form-control" v-model="domain_name" placeholder="Домен" @click="domain_name_active = true">
           </span>
         </div>
       </div>
       <br>
-      <div class="alert-danger error-message" v-show='!domain_name'>
+      <div class="alert-danger error-message" v-show='domain_name_active && !domain_name'>
         <span class="glyphicon glyphicon-warning-sign error-sign"></span>
           Поле обязательно для заполнения
       </div>
-      <div class="alert-danger error-message" v-show='domain_name && !isDomainValid'>
+      <div class="alert-danger error-message" v-show='domain_name_active && domain_name && !isDomainValid'>
         <span class="glyphicon glyphicon-warning-sign error-sign"></span>
          Данные указаны некорректно
       </div>
@@ -312,6 +312,7 @@ export default {
       instalation_time: (new Date().getHours() + ":" + '00'),
       name_input_active: false,
       entry_options_active: false,
+      domain_name_active: false,
     }
   },
   components: {
