@@ -1,6 +1,8 @@
 <template lang="html">
-  <div class="block-item" @click="toggleActive" :class="{ active: active }">
+  <div class="block-item" @mouseover="toggleActive" @mouseleave="toggleNotActive" :class="{ active: active }">
     <slot name="block-body">
+    </slot>
+    <slot name="description-item" :show='active'>
     </slot>
   </div>
 </template>
@@ -11,7 +13,10 @@ export default {
 
   methods: {
     toggleActive () {
-      this.active = !this.active
+      this.active = true
+    },
+    toggleNotActive() {
+      this.active = false
     }
   },
 
@@ -25,10 +30,12 @@ export default {
 
 <style lang="scss" scoped>
   .block-item {
-    padding: 12px 20px;
+    padding: 12px 20px 20px;
 
     &.active {
       background: #ffffe0;
     }
+
   }
+
 </style>
