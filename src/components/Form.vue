@@ -13,12 +13,12 @@
     <form>
 
     <FormBlock v-bind:class='{ "error-style": isNameShowError || isNameShowValidError }'>
-    <div slot="description-item" class="description">
-      <div class="description_text">
-        <p>На русском или <br> английском языках</p>
+      <div slot="description-item" class="description">
+        <div class="description_text">
+          <p>На русском или <br> английском языках</p>
+        </div>
+        <div class="glyphicon glyphicon-triangle-left description_arrow_small"></div>
       </div>
-      <div class="glyphicon glyphicon-triangle-left description_arrow_small"></div>
-    </div>
     <div slot="block-body">
       <label for="name">
         <h4>Полное имя для домена<span class="form-required"> *</span></h4>
@@ -134,14 +134,13 @@
     </FormBlock>
 
     <FormBlock>
-    <div slot="block-body">
-      <br>
-      <div slot="description-item" class="description">
-        <div class="description_text">
-          <p>Даже самая защищенная почта не защитит от потери данных, если компьютер не защищен</p>
-        </div>
-        <div class="glyphicon glyphicon-triangle-left description_arrow"></div>
+    <div slot="description-item" class="description">
+      <div class="description_text">
+        <p>Даже самая защищенная почта не защитит от потери данных, если компьютер не защищен</p>
       </div>
+      <div class="glyphicon glyphicon-triangle-left description_arrow"></div>
+    </div>
+    <div slot="block-body">
       <label for="laptop_audit">
         <h4>Провести аудит безопасности вашего компьютера?</h4>
       </label><br>
@@ -219,7 +218,7 @@
           </div>
           <div class="col-md-2">
             <span class="md-form">
-              <input type="text" id="computer_quantity" name="computer_quantity" class="form-control" placeholder="1" v-model="computer_quantity">
+              <input type="number" id="computer_quantity" name="computer_quantity" class="form-control" placeholder="1" v-model="computer_quantity">
             </span>
           </div>
         </div>
@@ -237,7 +236,7 @@
           </div>
           <div class="col-md-2">
             <span class="md-form">
-              <input type="text" id="mobile_quantity" name="mobile_quantity" class="form-control" placeholder="1" v-model="mobile_quantity">
+              <input type="number" id="mobile_quantity" name="mobile_quantity" class="form-control" placeholder="1" v-model="mobile_quantity">
             </span>
           </div>
         </div>
@@ -248,32 +247,32 @@
       </div>
       </FormBlock>
       <FormBlock v-bind:class='{ "error-style": !instalation_date || !instalation_time }'>
-      <div slot="block-body">
-        <label for="instalation_date"><h4>Дата помощи в настройке доступа<span class="form-required"> *</span></h4></label><br>
         <div slot="description-item" class="description">
           <div class="description_text">
             <p>Нам нужно будет от 30 минут до 1 часа, в зависимости от числа устройств. Время московское</p>
           </div>
           <div class="glyphicon glyphicon-triangle-left description_arrow"></div>
         </div>
+      <div slot="block-body">
+        <label for="instalation_date"><h4>Дата помощи в настройке доступа<span class="form-required"> *</span></h4></label><br>
         <div class="row">
           <div class="col-md-4">
             <span class="md-form">
-              <input type="date" id="instalation_date" name="instalation_date" class="form-control" v-model="instalation_date">
+              <datepicker language="ru" v-model="instalation_date"></datepicker>
               <label for="instalation_date" class="sub_label">Дата</label>
             </span>
           </div>
           <div class="col-md-1">
           <p>в</p>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <span class="md-form">
-              <input type="time" id="instalation_time" name="instalation_time" class="form-control" v-model="instalation_time">
+              <vue-timepicker v-model="instalation_time"></vue-timepicker>
               <label for="instalation_time" class="sub_label">Время</label>
             </span>
           </div>
         </div>
-        <div class="alert-danger error-message" v-show='!instalation_date || !instalation_time'>
+        <div class="alert-danger error-message" v-show='!instalation_date || !instalation_time.HH || !instalation_time.mm'>
           <span class="glyphicon glyphicon-warning-sign error-sign"></span>
           Поле обязательно для заполнения
         </div>
@@ -281,21 +280,21 @@
       </FormBlock>
     </div>
     <hr>
+    </form>
       <div class="block_item">
-        <v-link href="/contact_form">
-          <button type="submit" class="btn btn-primary center-block button-style">Далее</button>
-        </v-link>
+        <button type="button" class="btn btn-primary center-block button-style" v-on:click="submitForm">Далее</button>
       </div>
       <br><br>
       <p><pre>data: {{$data}}</pre></p>
-    </form>
+
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
 import FormBlock from './FormBlock'
-import VLink from './VLink'
+import VueTimepicker from 'vue2-timepicker'
+import Datepicker from 'vuejs-datepicker'
 
 export default {
   data() {
@@ -312,21 +311,30 @@ export default {
       computer_quantity: 1,
       mobile_quantity: 1,
       instalation_date: new Date().toJSON().slice(0,10),
-      instalation_time: (new Date().getHours() + ":" + '00'),
+      instalation_time: {
+        HH: '15',
+        mm: '00'
+      },
       name_input_active: false,
       entry_options_active: false,
-      domain_name_active: false,
+      domain_name_active: false
     }
   },
   components: {
     FormBlock,
-    VLink
+    VueTimepicker,
+    Datepicker
   },
   methods: {
     showDescription() {
       var item = document.getElementsByClassName("description")[0];
       item.style.display = "block";
       window.setTimeout(function () { item.style.display = "none"; }, 1000);
+    },
+    submitForm: function(){
+      if (!this.isErrors) {
+        this.$router.push('/contact_form');
+      }
     }
   },
   computed: {
@@ -346,13 +354,15 @@ export default {
       return (this.entry_options.length > 0);
     },
     isDomainValid() {
-      return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.domain_name);
+      if (this.domain_name_active) {
+        return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.domain_name);
+      } else {return true;}
     },
     showInstalationDetails() {
       return (this.installation === 'Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)');
     },
     isErrors() {
-      return (!isNameValid || !isSurnameValid || !isEntryOptions || !isDomainValid || !this.name || !this.surname || !computer_quantity || !mobile_quantity || !instalation_date || !instalation_time);
+      return (!this.isNameValid || !this.isSurnameValid || !this.isEntryOptions || !this.name || !this.surname || !this.computer_quantity || !this.mobile_quantity || !this.instalation_date || !this.instalation_time || !this.isDomainValid);
     }
 
     }
