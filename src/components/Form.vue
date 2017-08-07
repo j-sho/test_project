@@ -326,11 +326,6 @@ export default {
     Datepicker
   },
   methods: {
-    showDescription() {
-      var item = document.getElementsByClassName("description")[0];
-      item.style.display = "block";
-      window.setTimeout(function () { item.style.display = "none"; }, 1000);
-    },
     submitForm: function(){
       if (!this.isErrors) {
         this.$router.push('/contact_form');
