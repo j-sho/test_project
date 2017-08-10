@@ -8,6 +8,7 @@ import SubmissionForm from '@/components/SubmissionForm'
 import VueMask from 'v-mask'
 
 
+
 Vue.use(VueMask)
 Vue.use(Router)
 
