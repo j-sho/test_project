@@ -6,52 +6,57 @@
     </div>
     <hr>
     <form>
-      <FormBlock v-bind:class='{ "error-style": user_email_active && !user_email}'>
+      <FormBlock v-bind:class='{ "error-style": data.user_email_active && (!data.user_email || !isEmailValid)}'>
         <div slot="block-body">
           <div class="row">
             <label for="user_email"><h4>Адрес электронной почты<span class="form-required"> *</span></h4></label><br>
             <div class="col-md-4">
               <span class="md-form">
-                <input type="email" id="user_email" name="user_email" class="form-control" v-model="user_email" @click="user_email_active = true">
+                <input type="email" id="user_email" name="user_email" class="form-control" v-model="data.user_email" @click="data.user_email_active = true">
               </span>
             </div>
           </div>
           <br>
-          <div class="alert-danger error-message" v-show='user_email_active && !user_email'>
+          <div class="alert-danger error-message" v-show='data.user_email_active && !data.user_email'>
             <span class="glyphicon glyphicon-warning-sign error-sign"></span>
               Поле обязательно для заполнения
           </div>
-          <div class="alert-danger error-message" v-show='user_email_active && user_email && !isEmailValid'>
+          <div class="alert-danger error-message" v-show='data.user_email_active && data.user_email && !isEmailValid'>
             <span class="glyphicon glyphicon-warning-sign error-sign"></span>
              Данные указаны некорректно
           </div>
         </div>
       </FormBlock>
-      <FormBlock v-bind:class='{ "error-style": user_mobile_active && !user_contact_mobile}'>
+      <br>
+      <FormBlock v-bind:class='{ "error-style": data.user_mobile_active && (!data.user_contact_mobile || !isNumberValid)}'>
         <div slot="block-body">
           <div class="row">
-            <label for="uuser_contact_mobile"><h4>Телефон<span class="form-required"> *</span></h4></label><br>
+            <label for="user_contact_mobile"><h4>Телефон<span class="form-required"> *</span></h4></label><br>
             <div class="col-md-4">
               <span class="md-form">
-                <input type="tel" id="user_contact_mobile" name="user_contact_mobile" class="form-control" v-model="user_contact_mobile" @click="user_mobile_active = true">
+               <input type="tel" id="user_contact_mobile" name="user_contact_mobile" class="form-control" v-model="data.user_contact_mobile" v-mask="'+7 (###) ###-##-##'" placeholder="+7 (000) 000-00-00" @click="data.user_mobile_active = true">
               </span>
             </div>
           </div>
           <br>
-          <div class="alert-danger error-message" v-show='user_mobile_active && !user_contact_mobile'>
+          <div class="alert-danger error-message" v-show='data.user_mobile_active && (!data.user_contact_mobile || !isNumberValid)'>
             <span class="glyphicon glyphicon-warning-sign error-sign"></span>
-              Поле обязательно для заполнения
-          </div>
-          <div class="alert-danger error-message" v-show='user_mobile_active && user_contact_mobile && !isNumberValid'>
-            <span class="glyphicon glyphicon-warning-sign error-sign"></span>
-             Данные указаны некорректно
+            Данные указаны некорректно
           </div>
         </div>
       </FormBlock>
       </form>
-      <div class="block_item">
-        <button type="submit" class="btn btn-primary center-block">Далее</button>
-      </div>
+      <br>
+      <div class="button_block">
+        <div class="block_item">
+          <router-link to="/form">
+            <button type="cancel" class="btn btn-primary center-block button-style">Назад</button>
+          </router-link>
+        </div>
+        <div class="block_item">
+          <button type="submit" class="btn btn-primary center-block button-style" v-on:click="submitForm">Далее</button>
+        </div>
+      </div><br><br>
       <p><pre>data: {{$data}}</pre></p>
   </div>
 </template>
@@ -59,32 +64,29 @@
 <script>
 import Vue from 'vue'
 import FormBlock from './FormBlock'
+import store from '../store/store'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  name: 'name',
   data() {
     return {
-      user_email: '',
-      user_contact_mobile: '',
-      user_email_active: false,
-      user_mobile_active: false,
+      data: this.$store.state
     }
   },
   components: {
-    FormBlock
+    FormBlock,
   },
-  methods: {
-  },
-  computed: {
-    isEmailValid() {
-      return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.user_email);
-    },
-    isNumberValid() {
-      return /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/.test(this.user_contact_mobile);
-    },
-    isErrors() {
-      return (!this.user_email || !this.user_contact_mobile || !this.isEmailValid || !this.isNumberValid)
-    }
-    }
+  methods:
+    mapActions({
+      submitForm: 'submitContactForm'
+    }),
+  computed:
+    mapGetters({
+      isEmailValid: 'isEmailValid',
+      isNumberValid: 'isNumberValid',
+      isErrors: 'isContactFormErrors'
+    })
 }
 </script>
 
@@ -149,6 +151,12 @@ button {
   min-width: 100px;
   font-size: 1.3em;
   font-weight: bold;
+}
+
+.button_block {
+  display: flex;
+  justify-content: space-around;
+  padding: 0 200px;
 }
 
 
