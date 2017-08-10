@@ -6,64 +6,42 @@
     </div>
     <hr>
     <form>
-      <FormBlock v-bind:class='{ "error-style": user_email_active && !user_email}'>
+      <FormBlock v-bind:class='{ "error-style": data.user_email_active && (!data.user_email || !isEmailValid)}'>
         <div slot="block-body">
           <div class="row">
             <label for="user_email"><h4>Адрес электронной почты<span class="form-required"> *</span></h4></label><br>
             <div class="col-md-4">
-              <span class="md-form" @click="user_email_active = true">
-                <masked-input
-                  type="email"
-                  name="email"
-                  class="form-control"
-                  id="user_email"
-                  v-model="user_email"
-                  :mask="mask"
-                  :guide="true"
-                  :keepCharPositions="true"
-                  :showMask="true"
-                  placeholderChar="_">
-                </masked-input>
+              <span class="md-form">
+                <input type="email" id="user_email" name="user_email" class="form-control" v-model="data.user_email" @click="data.user_email_active = true">
               </span>
             </div>
           </div>
           <br>
-          <div class="alert-danger error-message" v-show='user_email_active && !user_email'>
+          <div class="alert-danger error-message" v-show='data.user_email_active && !data.user_email'>
             <span class="glyphicon glyphicon-warning-sign error-sign"></span>
               Поле обязательно для заполнения
           </div>
-          <div class="alert-danger error-message" v-show='user_email_active && user_email && !isEmailValid'>
+          <div class="alert-danger error-message" v-show='data.user_email_active && data.user_email && !isEmailValid'>
             <span class="glyphicon glyphicon-warning-sign error-sign"></span>
              Данные указаны некорректно
           </div>
         </div>
       </FormBlock>
       <br>
-      <FormBlock v-bind:class='{ "error-style": user_mobile_active && isNumberNotvalid }'>
+      <FormBlock v-bind:class='{ "error-style": data.user_mobile_active && (!data.user_contact_mobile || !isNumberValid)}'>
         <div slot="block-body">
           <div class="row">
             <label for="user_contact_mobile"><h4>Телефон<span class="form-required"> *</span></h4></label><br>
             <div class="col-md-4">
-              <span class="md-form" @click="user_mobile_active = true">
-                <masked-input
-                  type="text"
-                  name="phone"
-                  class="form-control"
-                  id="user_contact_mobile"
-                  v-model="user_contact_mobile"
-                  :mask="['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]"
-                  :guide="true"
-                  :keepCharPositions="false"
-                  :showMask="true"
-                  placeholderChar="_">
-                </masked-input>
+              <span class="md-form">
+               <input type="tel" id="user_contact_mobile" name="user_contact_mobile" class="form-control" v-model="data.user_contact_mobile" v-mask="'+7 (###) ###-##-##'" placeholder="+7 (000) 000-00-00" @click="data.user_mobile_active = true">
               </span>
             </div>
           </div>
           <br>
-          <div class="alert-danger error-message" v-show='user_mobile_active && isNumberNotvalid'>
+          <div class="alert-danger error-message" v-show='data.user_mobile_active && (!data.user_contact_mobile || !isNumberValid)'>
             <span class="glyphicon glyphicon-warning-sign error-sign"></span>
-             Данные указаны некорректно
+            Данные указаны некорректно
           </div>
         </div>
       </FormBlock>
@@ -86,44 +64,29 @@
 <script>
 import Vue from 'vue'
 import FormBlock from './FormBlock'
-import MaskedInput from 'vue-text-mask'
-import emailMask from 'text-mask-addons/dist/emailMask'
+import store from '../store/store'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'name',
   data() {
     return {
-      user_email: 'aaaaaa@aaaaaa.aa',
-      user_contact_mobile: '',
-      user_email_active: false,
-      user_mobile_active: false,
-      mask: emailMask,
+      data: this.$store.state
     }
   },
   components: {
     FormBlock,
-    MaskedInput,
-    emailMask
   },
-  methods: {
-    submitForm: function(){
-      if (!this.isErrors) {
-        console.log("HELLO");
-        this.$router.push('/submission_form');
-      } else {console.log("CHAO");}
-    }
-  },
-  computed: {
-    isEmailValid() {
-      return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.user_email);
-    },
-    isNumberNotvalid() {
-      return /_/.test(this.user_contact_mobile);
-    },
-    isErrors() {
-      return (!this.user_email || !this.user_contact_mobile || !this.isEmailValid || this.isNumberNotvalid)
-    }
-    }
+  methods:
+    mapActions({
+      submitForm: 'submitContactForm'
+    }),
+  computed:
+    mapGetters({
+      isEmailValid: 'isEmailValid',
+      isNumberValid: 'isNumberValid',
+      isErrors: 'isContactFormErrors'
+    })
 }
 </script>
 

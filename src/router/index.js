@@ -1,13 +1,15 @@
 import Vue from 'vue'
-import MaskedInput from 'vue-text-mask'
-import emailMask from 'text-mask-addons/dist/emailMask'
 import VueTimepicker from 'vue2-timepicker'
 import Datepicker from 'vuejs-datepicker'
 import Router from 'vue-router'
 import Form from '@/components/Form'
 import ContactForm from '@/components/ContactForm'
 import SubmissionForm from '@/components/SubmissionForm'
+import VueMask from 'v-mask'
 
+
+
+Vue.use(VueMask)
 Vue.use(Router)
 
 export default new Router({

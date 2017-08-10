@@ -27,13 +27,13 @@
       <div class="row">
         <div class="col-md-3">
           <span class="md-form">
-            <input type="text" id="name" name="name" class="form-control" v-model="name" @click="name_input_active = true">
+            <input type="text" id="name" name="name" class="form-control" v-model="user_input.name" @click="user_input.name_input_active = true">
             <label for="name" class="sub_label">Имя</label>
           </span>
         </div>
         <div  class="col-md-4">
           <span class="form-group">
-            <input type="text" id="surname" name="surname" class="form-control"  v-model="surname">
+            <input type="text" id="surname" name="surname" class="form-control"  v-model="user_input.surname">
             <label for="surname" class="sub_label">Фамилия</label>
           </span>
         </div>
@@ -54,31 +54,31 @@
       <div>
         <div class="form-check">
           <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="domain_name_type" id="domain_name1" value="true" v-model="domain_name_standart" checked>  Я хочу домен i@имя-фамилия.ru</label>
+          <input class="form-check-input" type="radio" name="domain_name_type" id="domain_name1" value="true" v-model="user_input.domain_name_standart" @click="changeToStandartName" checked>  Я хочу домен i@имя-фамилия.ru</label>
         </div>
         <div class="form-check">
           <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="domain_name_type" id="domain_name2" value="false" v-model="domain_name_standart">  Я хочу другой домен (скажу какой)</label>
+          <input class="form-check-input" type="radio" name="domain_name_type" id="domain_name2" value="false" v-model="user_input.domain_name_standart">  Я хочу другой домен (скажу какой)</label>
         </div>
       </div>
     </div>
     </FormBlock>
-    <FormBlock v-bind:class='{ "error-style": domain_name_active && (!domain_name || !isDomainValid) }' v-show="domain_name_standart === 'false'">
+    <FormBlock v-bind:class='{ "error-style": user_input.domain_name_active && (!user_input.domain_name || !isDomainValid) }' v-show="user_input.domain_name_standart === 'false'">
     <div slot="block-body">
       <div class="domain_name_option">
         <label for="domain_name"><h4>Предпочитаемый домен<span class="form-required"> *</span></h4></label><br>
         <div class="col-md-4 domain-name-input">
           <span class="md-form">
-            <input type="text" id="domain_name" name="domain_name" class="form-control" v-model="domain_name" placeholder="Домен" @click="domain_name_active = true">
+            <input type="text" id="domain_name" name="domain_name" class="form-control" v-model="user_input.domain_name" placeholder="Домен" @click="user_input.domain_name_active = true">
           </span>
         </div>
       </div>
       <br>
-      <div class="alert-danger error-message" v-show='domain_name_active && !domain_name'>
+      <div class="alert-danger error-message" v-show='user_input.domain_name_active && !user_input.domain_name'>
         <span class="glyphicon glyphicon-warning-sign error-sign"></span>
           Поле обязательно для заполнения
       </div>
-      <div class="alert-danger error-message" v-show='domain_name_active && domain_name && !isDomainValid'>
+      <div class="alert-danger error-message" v-show='user_input.domain_name_active && user_input.domain_name && !isDomainValid'>
         <span class="glyphicon glyphicon-warning-sign error-sign"></span>
          Данные указаны некорректно
       </div>
@@ -91,7 +91,7 @@
       </label><br>
       <div class="form-check">
         <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" value="1" v-model="personal_web" >
+          <input class="form-check-input" type="checkbox" value="1" v-model="user_input.personal_web" >
           Да (включено в стоимость)
         </label>
       </div>
@@ -114,19 +114,19 @@
       </label><br>
       <div class="form-check">
         <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" value="Вход через смс-сообщение на мой телефон" v-model="security_enter_option" checked>
+          <input class="form-check-input" type="checkbox" value="Вход через смс-сообщение на мой телефон" v-model="user_input.security_enter_option" checked>
           Вход через смс-сообщение на мой телефон
         </label>
       </div>
       <div class="form-check">
         <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" value="Вход через приложение на телефоне" v-model="security_enter_option" >
+          <input class="form-check-input" type="checkbox" value="Вход через приложение на телефоне" v-model="user_input.security_enter_option" >
           Вход через приложение на телефоне
         </label>
       </div>
       <div class="form-check">
         <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" value="Хочу создать USB-ключ для входа в почту" v-model="security_enter_option" >
+          <input class="form-check-input" type="checkbox" value="Хочу создать USB-ключ для входа в почту" v-model="user_input.security_enter_option" >
           Хочу создать USB-ключ для входа в почту
         </label>
       </div>
@@ -146,7 +146,7 @@
       </label><br>
       <div class="form-check">
         <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" id="laptop_audit" value="1" v-model="laptop_audit">
+          <input class="form-check-input" type="checkbox" id="laptop_audit" value="1" v-model="user_input.laptop_audit">
           Да (включено в стоимость)
         </label>
       </div>
@@ -161,34 +161,34 @@
       <p>Скажите нам, какие телефоны и компьютеры настроить для работы с почтой. Мы настроим почту везде.</p>
     </div>
 
-    <FormBlock v-bind:class='{ "error-style": entry_options_active && !isEntryOptions }'>
-    <div slot="block-body" @click="entry_options_active = true">
+    <FormBlock v-bind:class='{ "error-style": user_input.entry_options_active && !isEntryOptions }'>
+    <div slot="block-body" @click="user_input.entry_options_active = true">
       <label for="entry_options"><h4>Опции входа<span class="form-required"> *</span></h4></label><br>
       <div class="form-check">
         <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" id="laptop_audit" value="Буду заходить на почту через браузер (Chrome, IE, Safari и другие)" v-model="entry_options" checked>
+          <input class="form-check-input" type="checkbox" id="laptop_audit" value="Буду заходить на почту через браузер (Chrome, IE, Safari и другие)" v-model="user_input.entry_options" checked>
           Буду заходить на почту через браузер (Chrome, IE, Safari и другие)
         </label>
       </div>
       <div class="form-check">
         <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" id="laptop_audit" value="Буду проверять почту на Android телефоне" v-model="entry_options">
+          <input class="form-check-input" type="checkbox" id="laptop_audit" value="Буду проверять почту на Android телефоне" v-model="user_input.entry_options">
           Буду проверять почту на Android телефоне
         </label>
       </div>
       <div class="form-check">
         <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" id="laptop_audit" value="Буду проверять почту на iPhone" v-model="entry_options">
+          <input class="form-check-input" type="checkbox" id="laptop_audit" value="Буду проверять почту на iPhone" v-model="user_input.entry_options">
           Буду проверять почту на iPhone
         </label>
       </div>
       <div class="form-check">
         <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" id="laptop_audit" value="Хочу настроить почтовый клиент на компьютере (Outlook, Thunderbird, The Bat! и другие)" v-model="entry_options">
+          <input class="form-check-input" type="checkbox" id="laptop_audit" value="Хочу настроить почтовый клиент на компьютере (Outlook, Thunderbird, The Bat! и другие)" v-model="user_input.entry_options">
           Хочу настроить почтовый клиент на компьютере (Outlook, Thunderbird, The Bat! и другие)
         </label>
       </div>
-      <div class="alert-danger error-message" v-show='entry_options_active && !isEntryOptions'>
+      <div class="alert-danger error-message" v-show='user_input.entry_options_active && !isEntryOptions'>
         <span class="glyphicon glyphicon-warning-sign error-sign"></span>
          Поле обязательно для заполнения
       </div>
@@ -200,17 +200,17 @@
       <label for="installation"><h4>Как вы хотите настроить почту?<span class="form-required"> *</span></h4></label><br>
       <div class="form-check">
         <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="installation" id="installation_type1" value="Пришлите мне подробные настройки на почту, настрою все сам" v-model="installation" checked>  Пришлите мне подробные настройки на почту, настрою все сам</label>
+        <input class="form-check-input" type="radio" name="installation" id="installation_type1" value="Пришлите мне подробные настройки на почту, настрою все сам" v-model="user_input.installation" @click="clearInstalationData" checked>  Пришлите мне подробные настройки на почту, настрою все сам</label>
       </div>
       <div class="form-check">
         <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="installation" id="installation_type2" value="Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)" v-model="installation">  Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)</label>
+        <input class="form-check-input" type="radio" name="installation" id="installation_type2" value="Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)" v-model="user_input.installation">  Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)</label>
       </div>
     </div>
     </FormBlock>
     <br>
     <div v-show="showInstalationDetails">
-      <FormBlock v-bind:class='{ "error-style": !computer_quantity }'>
+      <FormBlock v-bind:class='{ "error-style": !user_input.computer_quantity }'>
       <div slot="block-body">
         <div class="row">
           <div class="col-md-3">
@@ -218,17 +218,17 @@
           </div>
           <div class="col-md-2">
             <span class="md-form">
-              <input type="number" id="computer_quantity" name="computer_quantity" class="form-control" placeholder="1" v-model="computer_quantity">
+              <input type="number" id="computer_quantity" name="computer_quantity" class="form-control" placeholder="1" v-model="user_input.computer_quantity">
             </span>
           </div>
         </div>
-        <div class="alert-danger error-message" v-show='!computer_quantity'>
+        <div class="alert-danger error-message" v-show='!user_input.computer_quantity'>
           <span class="glyphicon glyphicon-warning-sign error-sign"></span>
           Поле обязательно для заполнения
         </div>
       </div>
       </FormBlock>
-      <FormBlock v-bind:class='{ "error-style": !mobile_quantity }'>
+      <FormBlock v-bind:class='{ "error-style": !user_input.mobile_quantity }'>
       <div slot="block-body">
         <div class="row">
           <div class="col-md-3">
@@ -236,17 +236,17 @@
           </div>
           <div class="col-md-2">
             <span class="md-form">
-              <input type="number" id="mobile_quantity" name="mobile_quantity" class="form-control" placeholder="1" v-model="mobile_quantity">
+              <input type="number" id="mobile_quantity" name="mobile_quantity" class="form-control" placeholder="1" v-model="user_input.mobile_quantity">
             </span>
           </div>
         </div>
-        <div class="alert-danger error-message" v-show='!mobile_quantity'>
+        <div class="alert-danger error-message" v-show='!user_input.mobile_quantity'>
           <span class="glyphicon glyphicon-warning-sign error-sign"></span>
           Поле обязательно для заполнения
         </div>
       </div>
       </FormBlock>
-      <FormBlock v-bind:class='{ "error-style": !instalation_date || !instalation_time }'>
+      <FormBlock v-bind:class='{ "error-style": !user_input.instalation_date || !user_input.instalation_time }'>
         <div slot="description-item" class="description">
           <div class="description_text">
             <p>Нам нужно будет от 30 минут до 1 часа, в зависимости от числа устройств. Время московское</p>
@@ -258,7 +258,7 @@
         <div class="row">
           <div class="col-md-4">
             <span class="md-form">
-              <datepicker language="ru" v-model="instalation_date"></datepicker>
+              <datepicker language="ru" v-model="user_input.instalation_date"></datepicker>
               <label for="instalation_date" class="sub_label">Дата</label>
             </span>
           </div>
@@ -267,12 +267,12 @@
           </div>
           <div class="col-md-2">
             <span class="md-form">
-              <vue-timepicker v-model="instalation_time"></vue-timepicker>
+              <vue-timepicker v-model="user_input.instalation_time"></vue-timepicker>
               <label for="instalation_time" class="sub_label">Время</label>
             </span>
           </div>
         </div>
-        <div class="alert-danger error-message" v-show='!instalation_date || !instalation_time.HH || !instalation_time.mm'>
+        <div class="alert-danger error-message" v-show='!user_input.instalation_date || !user_input.instalation_time.HH || !user_input.instalation_time.mm'>
           <span class="glyphicon glyphicon-warning-sign error-sign"></span>
           Поле обязательно для заполнения
         </div>
@@ -284,7 +284,7 @@
       <div class="block_item">
         <button type="button" class="btn btn-primary center-block button-style" v-on:click="submitForm">Далее</button>
       </div>
-      <br><br>
+      <br>{{isNameValid}}<br>
       <p><pre>data: {{$data}}</pre></p>
 
   </div>
@@ -295,29 +295,14 @@ import Vue from 'vue'
 import FormBlock from './FormBlock'
 import VueTimepicker from 'vue2-timepicker'
 import Datepicker from 'vuejs-datepicker'
+import store from '../store/store'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
     return {
-      name: '',
-      surname: '',
-      domain_name_standart: true,
-      domain_name: '',
-      personal_web: true,
-      security_enter_option: [],
-      laptop_audit: true,
-      entry_options: [],
-      installation: 'Пришлите мне подробные настройки на почту, настрою все сам',
-      computer_quantity: 1,
-      mobile_quantity: 1,
-      instalation_date: new Date().toJSON().slice(0,10),
-      instalation_time: {
-        HH: '15',
-        mm: '00'
-      },
-      name_input_active: false,
-      entry_options_active: false,
-      domain_name_active: false
+      user_input: this.$store.state.user_input
+
     }
   },
   components: {
@@ -328,40 +313,70 @@ export default {
   methods: {
     submitForm: function(){
       if (!this.isErrors) {
+        localStorage.clear();
+        var serialObj = JSON.stringify(this.user_input);
+        localStorage.setItem('newUserData', serialObj);
         this.$router.push('/contact_form');
+      } else {
+        this.user_input.name_input_active = true;
+        this.user_input.entry_options_active = true;
+        if(!this.user_input.domain_name_standart) {
+          this.user_input.domain_name_active = true;
+        }
       }
+    },
+    changeToStandartName: function() {
+      this.user_input.domain_name = '';
+      this.user_input.domain_name_active = false;
+    },
+    clearInstalationData: function() {
+      this.user_input.computer_quantity = 1;
+      this.user_input.mobile_quantity = 1;
+      this.user_input.instalation_date = new Date().toJSON().slice(0,10);
+      this.user_input.instalation_time = {
+      "HH": "00",
+      "mm": "00"
+    };
+    },
+  },
+  created() {
+    if (JSON.parse(localStorage.getItem("newUserData"))) {
+      this.user_input = JSON.parse(localStorage.getItem("newUserData"));
     }
   },
   computed: {
-    isNameValid() {
-      return (/^[A-Za-z]+$/.test(this.name) && (this.name.length > 3));
-    },
+    ...mapGetters({
+      isNameValid: 'isNameValid',
+    }),
     isSurnameValid() {
-      return (/^[A-Za-z]+$/.test(this.surname) && (this.surname.length > 3));
+      return (/^[A-Za-z]+$/.test(this.user_input.surname) && (this.user_input.surname.length > 3));
     },
     isNameShowError() {
-      return (this.name_input_active && (!this.name || !this.surname));
+      return (this.user_input.name_input_active && (!this.user_input.name || !this.user_input.surname));
     },
     isNameShowValidError() {
-      return (this.name_input_active && !this.isNameShowError && (!this.isNameValid || !this.isSurnameValid));
+      return (this.user_input.name_input_active && !this.isNameShowError && (!this.isNameValid || !this.isSurnameValid));
     },
     isEntryOptions() {
-      return (this.entry_options.length > 0);
+      return (this.user_input.entry_options.length > 0);
     },
     isDomainValid() {
-      if (this.domain_name_active) {
-        return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.domain_name);
+      if (this.user_input.domain_name_active) {
+        return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.user_input.domain_name);
       } else {return true;}
     },
     showInstalationDetails() {
-      return (this.installation === 'Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)');
+      return (this.user_input.installation === 'Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)');
     },
     isErrors() {
-      return (!this.isNameValid || !this.isSurnameValid || !this.isEntryOptions || !this.name || !this.surname || !this.computer_quantity || !this.mobile_quantity || !this.instalation_date || !this.instalation_time || !this.isDomainValid);
-    }
+      return (!this.isNameValid || !this.isSurnameValid || !this.isEntryOptions || !this.user_input.name || !this.user_input.surname || !this.user_input.computer_quantity || !this.user_input.mobile_quantity || !this.user_input.instalation_date || !this.user_input.instalation_time || !this.isDomainValid);
+    },
 
-    }
+  }
+
+
 }
+
 </script>
 
 
