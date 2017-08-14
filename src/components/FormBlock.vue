@@ -2,7 +2,6 @@
   <div class="block-item" @mouseover="toggleActive" @mouseleave="toggleNotActive" :class="{ active: active }">
     <slot name="block-body">
     </slot>
-
     <slot name="description-item" v-if="active">
     </slot>
   </div>
@@ -36,5 +35,8 @@ export default {
     &.active {
       background: #ffffe0;
     }
+
   }
+
+
 </style>
