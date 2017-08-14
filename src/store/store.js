@@ -8,17 +8,27 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
+        user_email: '',
+        user_contact_mobile: '',
+        submitedContactForm: false,
         inputData: {}
     },
 
     getters: {
+        loadedData (state) {
+            return state;
+      }
 
     },
 
     mutations: {
         createUserInputData(state, payload) {
-            console.log(payload);
-            state.inputData.push(payload);
+            state.inputData = payload;
+        },
+        createUserContactData(state, payload) {
+            state.user_email = payload.user_email;
+            state.user_contact_mobile = payload.user_contact_mobile;
+            state.submitedContactForm = payload.submitedContactForm;
         }
     },
 
