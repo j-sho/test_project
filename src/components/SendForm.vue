@@ -1,50 +1,68 @@
 <template>
   <div class="container">
-    Форма для брендированной почты
-    <!-- <table>
-      <tr>
-        <td>Полное имя для домена</td>
-        <td>{{name }} {{surname}}</td>
+    <h2>Форма для брендированной почты</h2>
+    <table class="table table-bordered table-personal-style">
+      <tr class="table table-bordered">
+        <th>Полное имя для домена</th>
+        <td>{{ data.inputData.name }} {{ data.inputData.surname }}</td>
       </tr>
-      <tr>
-        <td>Домен</td>
-        <td>Я хочу домен {{domain_name}}</td>
+      <tr class="table table-bordered">
+        <th>Домен</th>
+        <td v-if="data.inputData.domain_name_standart">Я хочу домен i@{{data.inputData.name}}{{data.inputData.surname}}.ru</td>
+        <td v-else>Я хочу домен {{data.inputData.domain_name}}</td>
       </tr>
-      <tr>
-        <td>Сделать для вас простую страницу с вашим именем на вашем домене?</td>
-        <td>{{personal_web if true ="Да (включено в стоимость)"}}</td>
+      <tr class="table table-bordered">
+        <th>Сделать для вас простую страницу с вашим именем на вашем домене?</th>
+        <td v-if="data.inputData.personal_web">Да (включено в стоимость)</td>
+        <td v-else>Нет</td>
       </tr>
-      <tr>
-        <td>Какие способы защиты настроить?</td>
-        <td>{{security_enter_option}}</td>
+      <tr class="table table-bordered">
+        <th>Какие способы защиты настроить?</th>
+        <td><li v-for="item in data.inputData.security_enter_option">{{ item }}</li>
+        </td>
       </tr>
-      <tr>
-        <td>Вход через приложение на телефоне</td>
-        <td>{{entry_options}}</td>
+      <tr class="table table-bordered">
+        <th>Вход через приложение на телефоне</th>
+        <td><li v-for="item in data.inputData.entry_options">{{ item }}</li>
+        </td>
       </tr>
-      <tr>
-        <td>Как вы хотите настроить почту?</td>
-        <td>{{installation if = true "Пришлите мне подробные настройки на почту, настрою все сам"}}</td>
+      <tr class="table table-bordered">
+        <th>Как вы хотите настроить почту?</th>
+        <td v-if="data.inputData.installation == '1'">Пришлите мне подробные настройки на почту, настрою все сам</td>
+        <td v-else>Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)</td>
       </tr>
-      <tr>
-        <td>Адрес электронной почты</td>
-        <td>{{user_email}}</td>
+      <tr v-if="data.inputData.installation == '2'" class="table table-bordered">
+        <th>Количество компьютеров</th>
+        <td>{{data.inputData.computer_quantity}}</td>
       </tr>
-      <tr>
-        <td>Телефон</td>
-        <td>{{user_contact_mobile}}</td>
+      <tr v-if="data.inputData.installation == '2'" class="table table-bordered">
+        <th>Количество смартфонов</th>
+        <td>{{data.inputData.mobile_quantity}}</td>
       </tr>
-    </table> -->
+      <tr v-if="data.inputData.installation == '2'" class="table table-bordered">
+        <th>Дата помощи в настройке доступа</th>
+        <td>{{data.inputData.instalation_date}} в {{data.inputData.instalation_time.HH}}:{{data.inputData.instalation_time.mm}}</td>
+      </tr>
+      <tr class="table table-bordered">
+        <th>Адрес электронной почты</th>
+        <td>{{data.user_email}}</td>
+      </tr>
+      <tr class="table table-bordered">
+        <th>Телефон</th>
+        <td>{{data.user_contact_mobile}}</td>
+      </tr>
+    </table>
+
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
+import store from '../store/store'
 
 export default {
   data() {
     return {
-
     }
   },
   components: {
@@ -52,7 +70,10 @@ export default {
   methods: {
   },
   computed: {
+    data () {
+        return this.$store.getters.loadedData
     }
+  }
 }
 </script>
 
@@ -83,6 +104,16 @@ h4 {
   font-weight: bold;
 }
 
+.table-personal-style {
+  max-width: 600px;
+  margin: 30px;
+  text-align: left;
+}
+
+td,
+th {
+  padding: 10px;
+}
 
 
 </style>
