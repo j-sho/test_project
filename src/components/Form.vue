@@ -200,11 +200,11 @@
       <label for="installation"><h4>Как вы хотите настроить почту?<span class="form-required"> *</span></h4></label><br>
       <div class="form-check">
         <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="installation" id="installation_type1" value="Пришлите мне подробные настройки на почту, настрою все сам" v-model="user_input.installation" @click="clearInstalationData" checked>  Пришлите мне подробные настройки на почту, настрою все сам</label>
+        <input class="form-check-input" type="radio" name="installation" id="installation_type1" value="1" v-model="user_input.installation" @click="clearInstalationData" checked>  Пришлите мне подробные настройки на почту, настрою все сам</label>
       </div>
       <div class="form-check">
         <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="installation" id="installation_type2" value="Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)" v-model="user_input.installation">  Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)</label>
+        <input class="form-check-input" type="radio" name="installation" id="installation_type2" value="2" v-model="user_input.installation">  Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)</label>
       </div>
     </div>
     </FormBlock>
@@ -296,7 +296,6 @@ import FormBlock from './FormBlock'
 import VueTimepicker from 'vue2-timepicker'
 import Datepicker from 'vuejs-datepicker'
 import store from '../store/store'
-import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
@@ -310,7 +309,7 @@ export default {
         security_enter_option: [],
         laptop_audit: true,
         entry_options: [],
-        installation: 'Пришлите мне подробные настройки на почту, настрою все сам',
+        installation: '1',
         computer_quantity: 1,
         mobile_quantity: 1,
         instalation_date: new Date().toJSON().slice(0,10),
@@ -320,7 +319,8 @@ export default {
         },
         name_input_active: false,
         entry_options_active: false,
-        domain_name_active: false
+        domain_name_active: false,
+        submitedInputForm: false
       }
     }
   },
@@ -332,10 +332,11 @@ export default {
   methods: {
     submitForm: function(){
       if (!this.isErrors) {
+        this.user_input.submitedInputForm = true;
         localStorage.clear();
         var serialObj = JSON.stringify(this.user_input);
         localStorage.setItem('newUserData', serialObj);
-        this.$store.commit('createUserInputData', serialObj);
+        this.$store.commit('createUserInputData', this.user_input);
         this.$router.push('/contact_form');
       } else {
         this.user_input.name_input_active = true;
@@ -387,7 +388,7 @@ export default {
       } else {return true;}
     },
     showInstalationDetails() {
-      return (this.user_input.installation === 'Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)');
+      return (this.user_input.installation === '2');
     },
     isErrors() {
       return (!this.isNameValid || !this.isSurnameValid || !this.isEntryOptions || !this.user_input.name || !this.user_input.surname || !this.user_input.computer_quantity || !this.user_input.mobile_quantity || !this.user_input.instalation_date || !this.user_input.instalation_time || !this.isDomainValid);
