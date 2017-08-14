@@ -284,7 +284,7 @@
       <div class="block_item">
         <button type="button" class="btn btn-primary center-block button-style" v-on:click="submitForm">Далее</button>
       </div>
-      <br>{{isNameValid}}<br>
+      <br><br>
       <p><pre>data: {{$data}}</pre></p>
 
   </div>
@@ -301,8 +301,27 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      user_input: this.$store.state.user_input
-
+      user_input: {
+        name: '',
+        surname: '',
+        domain_name_standart: true,
+        domain_name: '',
+        personal_web: true,
+        security_enter_option: [],
+        laptop_audit: true,
+        entry_options: [],
+        installation: 'Пришлите мне подробные настройки на почту, настрою все сам',
+        computer_quantity: 1,
+        mobile_quantity: 1,
+        instalation_date: new Date().toJSON().slice(0,10),
+        instalation_time: {
+          "HH": "00",
+          "mm": "00"
+        },
+        name_input_active: false,
+        entry_options_active: false,
+        domain_name_active: false
+      }
     }
   },
   components: {
@@ -316,6 +335,7 @@ export default {
         localStorage.clear();
         var serialObj = JSON.stringify(this.user_input);
         localStorage.setItem('newUserData', serialObj);
+        this.$store.commit('createUserInputData', serialObj);
         this.$router.push('/contact_form');
       } else {
         this.user_input.name_input_active = true;
@@ -345,9 +365,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      isNameValid: 'isNameValid',
-    }),
+
+    isNameValid() {
+      return (/^[A-Za-z]+$/.test(this.user_input.name) && (this.user_input.name.length > 3));
+    },
     isSurnameValid() {
       return (/^[A-Za-z]+$/.test(this.user_input.surname) && (this.user_input.surname.length > 3));
     },
@@ -373,7 +394,6 @@ export default {
     },
 
   }
-
 
 }
 
