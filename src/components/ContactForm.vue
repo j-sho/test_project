@@ -65,7 +65,6 @@
 import Vue from 'vue'
 import FormBlock from './FormBlock'
 import store from '../store/store'
-import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'name',
@@ -83,7 +82,13 @@ export default {
   methods: {
     submitForm: function(){
       if (!this.isErrors) {
-        this.$router.push('/submission_form');
+        const contactData = {
+          user_email: this.user_email,
+          user_contact_mobile: this.user_contact_mobile,
+          submitedContactForm: true
+        }
+        this.$store.commit('createUserContactData', contactData);
+        this.$router.push('/send_form');
       } else {
         this.user_email_active = true;
         this.user_mobile_active = true;
@@ -176,3 +181,4 @@ button {
 
 
 </style>
+
