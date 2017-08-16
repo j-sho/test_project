@@ -200,11 +200,11 @@
       <label for="installation"><h4>Как вы хотите настроить почту?<span class="form-required"> *</span></h4></label><br>
       <div class="form-check">
         <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="installation" id="installation_type1" value="Пришлите мне подробные настройки на почту, настрою все сам" v-model="user_input.installation" @click="clearInstalationData" checked>  Пришлите мне подробные настройки на почту, настрою все сам</label>
+        <input class="form-check-input" type="radio" name="installation" id="installation_type1" value="1" v-model="user_input.installation" @click="clearInstalationData" checked>  Пришлите мне подробные настройки на почту, настрою все сам</label>
       </div>
       <div class="form-check">
         <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="installation" id="installation_type2" value="Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)" v-model="user_input.installation">  Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)</label>
+        <input class="form-check-input" type="radio" name="installation" id="installation_type2" value="2" v-model="user_input.installation">  Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)</label>
       </div>
     </div>
     </FormBlock>
@@ -284,7 +284,7 @@
       <div class="block_item">
         <button type="button" class="btn btn-primary center-block button-style" v-on:click="submitForm">Далее</button>
       </div>
-      <br>{{isNameValid}}<br>
+      <br><br>
       <p><pre>data: {{$data}}</pre></p>
 
   </div>
@@ -296,13 +296,32 @@ import FormBlock from './FormBlock'
 import VueTimepicker from 'vue2-timepicker'
 import Datepicker from 'vuejs-datepicker'
 import store from '../store/store'
-import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
     return {
-      user_input: this.$store.state.user_input
-
+      user_input: {
+        name: '',
+        surname: '',
+        domain_name_standart: true,
+        domain_name: '',
+        personal_web: true,
+        security_enter_option: [],
+        laptop_audit: true,
+        entry_options: [],
+        installation: '1',
+        computer_quantity: 1,
+        mobile_quantity: 1,
+        instalation_date: new Date().toJSON().slice(0,10),
+        instalation_time: {
+          "HH": "00",
+          "mm": "00"
+        },
+        name_input_active: false,
+        entry_options_active: false,
+        domain_name_active: false,
+        submitedInputForm: false
+      }
     }
   },
   components: {
@@ -313,9 +332,11 @@ export default {
   methods: {
     submitForm: function(){
       if (!this.isErrors) {
+        this.user_input.submitedInputForm = true;
         localStorage.clear();
         var serialObj = JSON.stringify(this.user_input);
         localStorage.setItem('newUserData', serialObj);
+        this.$store.commit('createUserInputData', this.user_input);
         this.$router.push('/contact_form');
       } else {
         this.user_input.name_input_active = true;
@@ -345,9 +366,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      isNameValid: 'isNameValid',
-    }),
+
+    isNameValid() {
+      return (/^[A-Za-z]+$/.test(this.user_input.name) && (this.user_input.name.length > 3));
+    },
     isSurnameValid() {
       return (/^[A-Za-z]+$/.test(this.user_input.surname) && (this.user_input.surname.length > 3));
     },
@@ -366,14 +388,13 @@ export default {
       } else {return true;}
     },
     showInstalationDetails() {
-      return (this.user_input.installation === 'Подключитесь ко мне через удаленный доступ и настройте все сами (+850 рублей)');
+      return (this.user_input.installation === '2');
     },
     isErrors() {
       return (!this.isNameValid || !this.isSurnameValid || !this.isEntryOptions || !this.user_input.name || !this.user_input.surname || !this.user_input.computer_quantity || !this.user_input.mobile_quantity || !this.user_input.instalation_date || !this.user_input.instalation_time || !this.isDomainValid);
     },
 
   }
-
 
 }
 
