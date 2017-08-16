@@ -62,50 +62,56 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import FormBlock from './FormBlock'
-import store from '../store/store'
 
 export default {
   name: 'name',
-  data() {
+
+  data () {
     return {
       user_email: '',
       user_contact_mobile: '',
       user_email_active: false,
-      user_mobile_active: false,
+      user_mobile_active: false
     }
   },
+
   components: {
-    FormBlock,
+    FormBlock
   },
+
   methods: {
-    submitForm: function(){
+    submitForm () {
       if (!this.isErrors) {
         const contactData = {
+          submitedContactForm: true,
           user_email: this.user_email,
-          user_contact_mobile: this.user_contact_mobile,
-          submitedContactForm: true
+          user_contact_mobile: this.user_contact_mobile
         }
-        this.$store.commit('createUserContactData', contactData);
-        this.$router.push('/send_form');
+
+        this.$store.commit('createUserContactData', contactData)
+
+        this.$router.push('/send_form')
       } else {
-        this.user_email_active = true;
-        this.user_mobile_active = true;
+        this.user_email_active = true
+        this.user_mobile_active = true
       }
     }
   },
+
   computed: {
-    isEmailValid() {
-      return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.user_email);
+    isEmailValid () {
+      return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.user_email)
     },
-    isNumberValid() {
-      return /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{10}$/.test(this.user_contact_mobile);
+
+    isNumberValid () {
+      return /^((8|\+7)[- ]?)?(\(?\d{3}\)?[- ]?)?[\d\- ]{10}$/.test(this.user_contact_mobile)
     },
-    isErrors() {
-      return (!this.user_email || !this.isEmailValid || !this.isNumberValid);
+
+    isErrors () {
+      return (!this.user_email || !this.isEmailValid || !this.isNumberValid)
     }
-    }
+  }
 }
 </script>
 
@@ -181,4 +187,3 @@ button {
 
 
 </style>
-

@@ -5,7 +5,6 @@ import App from './App'
 import router from './router'
 import { store } from './store/store'
 
-
 Vue.config.productionTip = false
 
 const app = new Vue(Vue.util.extend({

@@ -57,21 +57,10 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import store from '../store/store'
-
 export default {
-  data() {
-    return {
-    }
-  },
-  components: {
-  },
-  methods: {
-  },
   computed: {
     data () {
-        return this.$store.getters.loadedData
+      return this.$store.getters.loadedData
     }
   }
 }
