@@ -291,14 +291,18 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import FormBlock from './FormBlock'
-import VueTimepicker from 'vue2-timepicker'
 import Datepicker from 'vuejs-datepicker'
-import store from '../store/store'
+import VueTimepicker from 'vue2-timepicker'
 
 export default {
-  data() {
+  components: {
+    FormBlock,
+    Datepicker,
+    VueTimepicker
+  },
+
+  data () {
     return {
       user_input: {
         name: '',
@@ -312,10 +316,10 @@ export default {
         installation: '1',
         computer_quantity: 1,
         mobile_quantity: 1,
-        instalation_date: new Date().toJSON().slice(0,10),
+        instalation_date: new Date().toJSON().slice(0, 10),
         instalation_time: {
-          "HH": "00",
-          "mm": "00"
+          'HH': '00',
+          'mm': '00'
         },
         name_input_active: false,
         entry_options_active: false,
@@ -324,82 +328,89 @@ export default {
       }
     }
   },
-  components: {
-    FormBlock,
-    VueTimepicker,
-    Datepicker
-  },
+
   methods: {
-    submitForm: function(){
+    submitForm () {
       if (!this.isErrors) {
-        this.user_input.submitedInputForm = true;
-        localStorage.clear();
-        var serialObj = JSON.stringify(this.user_input);
-        localStorage.setItem('newUserData', serialObj);
-        this.$store.commit('createUserInputData', this.user_input);
-        this.$router.push('/contact_form');
+        const serialObj = JSON.stringify(this.user_input)
+
+        this.user_input.submitedInputForm = true
+        localStorage.clear()
+        localStorage.setItem('newUserData', serialObj)
+        this.$store.commit('createUserInputData', this.user_input)
+
+        this.$router.push('/contact_form')
       } else {
-        this.user_input.name_input_active = true;
-        this.user_input.entry_options_active = true;
-        if(!this.user_input.domain_name_standart) {
-          this.user_input.domain_name_active = true;
+        this.user_input.name_input_active = true
+        this.user_input.entry_options_active = true
+
+        if (!this.user_input.domain_name_standart) {
+          this.user_input.domain_name_active = true
         }
       }
     },
-    changeToStandartName: function() {
-      this.user_input.domain_name = '';
-      this.user_input.domain_name_active = false;
+
+    changeToStandartName () {
+      this.user_input.domain_name = ''
+      this.user_input.domain_name_active = false
     },
-    clearInstalationData: function() {
-      this.user_input.computer_quantity = 1;
-      this.user_input.mobile_quantity = 1;
-      this.user_input.instalation_date = new Date().toJSON().slice(0,10);
+
+    clearInstalationData () {
+      this.user_input.mobile_quantity = 1
+      this.user_input.computer_quantity = 1
+      this.user_input.instalation_date = new Date().toJSON().slice(0, 10)
       this.user_input.instalation_time = {
-      "HH": "00",
-      "mm": "00"
-    };
-    },
-  },
-  created() {
-    if (JSON.parse(localStorage.getItem("newUserData"))) {
-      this.user_input = JSON.parse(localStorage.getItem("newUserData"));
+        'HH': '00',
+        'mm': '00'
+      }
     }
   },
+
+  created () {
+    if (JSON.parse(localStorage.getItem('newUserData'))) {
+      this.user_input = JSON.parse(localStorage.getItem('newUserData'))
+    }
+  },
+
   computed: {
+    isNameValid () {
+      return (/^[A-Za-z]+$/.test(this.user_input.name) && (this.user_input.name.length > 3))
+    },
 
-    isNameValid() {
-      return (/^[A-Za-z]+$/.test(this.user_input.name) && (this.user_input.name.length > 3));
+    isSurnameValid () {
+      return (/^[A-Za-z]+$/.test(this.user_input.surname) && (this.user_input.surname.length > 3))
     },
-    isSurnameValid() {
-      return (/^[A-Za-z]+$/.test(this.user_input.surname) && (this.user_input.surname.length > 3));
+
+    isNameShowError () {
+      return (this.user_input.name_input_active && (!this.user_input.name || !this.user_input.surname))
     },
-    isNameShowError() {
-      return (this.user_input.name_input_active && (!this.user_input.name || !this.user_input.surname));
+
+    isNameShowValidError () {
+      return (this.user_input.name_input_active && !this.isNameShowError && (!this.isNameValid || !this.isSurnameValid))
     },
-    isNameShowValidError() {
-      return (this.user_input.name_input_active && !this.isNameShowError && (!this.isNameValid || !this.isSurnameValid));
+
+    isEntryOptions () {
+      return this.user_input.entry_options.length > 0
     },
-    isEntryOptions() {
-      return (this.user_input.entry_options.length > 0);
-    },
-    isDomainValid() {
+
+    isDomainValid () {
       if (this.user_input.domain_name_active) {
-        return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.user_input.domain_name);
-      } else {return true;}
-    },
-    showInstalationDetails() {
-      return (this.user_input.installation === '2');
-    },
-    isErrors() {
-      return (!this.isNameValid || !this.isSurnameValid || !this.isEntryOptions || !this.user_input.name || !this.user_input.surname || !this.user_input.computer_quantity || !this.user_input.mobile_quantity || !this.user_input.instalation_date || !this.user_input.instalation_time || !this.isDomainValid);
+        return /^(([^<>()[\]\\.,:\s@"]+(\.[^<>()[\]\\.,:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.user_input.domain_name)
+      } else {
+        return true
+      }
     },
 
+    showInstalationDetails () {
+      return (this.user_input.installation === '2')
+    },
+
+    isErrors () {
+      return (!this.isNameValid || !this.isSurnameValid || !this.isEntryOptions || !this.user_input.name || !this.user_input.surname || !this.user_input.computer_quantity || !this.user_input.mobile_quantity || !this.user_input.instalation_date || !this.user_input.instalation_time || !this.isDomainValid)
+    }
   }
-
 }
-
 </script>
-
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
@@ -413,7 +424,6 @@ export default {
 
 .description {
   position: relative;
-
 }
 
 .description_text {
@@ -462,9 +472,9 @@ h1 {
 }
 
 h2 {
-    line-height: 1.618em;
-    font-size: 1.714em;
-    font-weight: bold;
+  line-height: 1.618em;
+  font-size: 1.714em;
+  font-weight: bold;
 }
 
 h4 {
@@ -515,6 +525,4 @@ button {
   font-size: 1.3em;
   font-weight: bold;
 }
-
-
 </style>

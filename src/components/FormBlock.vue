@@ -15,7 +15,7 @@ export default {
     toggleActive () {
       this.active = true
     },
-    toggleNotActive() {
+    toggleNotActive () {
       this.active = false
     }
   },
