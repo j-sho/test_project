@@ -294,6 +294,7 @@
 import FormBlock from './FormBlock'
 import Datepicker from 'vuejs-datepicker'
 import VueTimepicker from 'vue2-timepicker'
+import {isNameInput, isNameShowValidError, isEntryOptions, isDomainValid, showInstalationDetails, isErrors} from '../mixins/validation'
 
 export default {
   components: {
@@ -372,43 +373,7 @@ export default {
     }
   },
 
-  computed: {
-    isNameValid () {
-      return (/^[A-Za-z]+$/.test(this.user_input.name) && (this.user_input.name.length > 3))
-    },
-
-    isSurnameValid () {
-      return (/^[A-Za-z]+$/.test(this.user_input.surname) && (this.user_input.surname.length > 3))
-    },
-
-    isNameShowError () {
-      return (this.user_input.name_input_active && (!this.user_input.name || !this.user_input.surname))
-    },
-
-    isNameShowValidError () {
-      return (this.user_input.name_input_active && !this.isNameShowError && (!this.isNameValid || !this.isSurnameValid))
-    },
-
-    isEntryOptions () {
-      return this.user_input.entry_options.length > 0
-    },
-
-    isDomainValid () {
-      if (this.user_input.domain_name_active) {
-        return /^(([^<>()[\]\\.,:\s@"]+(\.[^<>()[\]\\.,:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.user_input.domain_name)
-      } else {
-        return true
-      }
-    },
-
-    showInstalationDetails () {
-      return (this.user_input.installation === '2')
-    },
-
-    isErrors () {
-      return (!this.isNameValid || !this.isSurnameValid || !this.isEntryOptions || !this.user_input.name || !this.user_input.surname || !this.user_input.computer_quantity || !this.user_input.mobile_quantity || !this.user_input.instalation_date || !this.user_input.instalation_time || !this.isDomainValid)
-    }
-  }
+  mixins: [isNameInput, isNameShowValidError, isEntryOptions, isDomainValid, showInstalationDetails, isErrors]
 }
 </script>
 

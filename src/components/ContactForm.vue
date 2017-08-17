@@ -63,6 +63,7 @@
 
 <script>
 import FormBlock from './FormBlock'
+import {isEmailValid, isNumberValid, isContactErrors} from '../mixins/validation'
 
 export default {
   name: 'name',
@@ -99,19 +100,7 @@ export default {
     }
   },
 
-  computed: {
-    isEmailValid () {
-      return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.user_email)
-    },
-
-    isNumberValid () {
-      return /^((8|\+7)[- ]?)?(\(?\d{3}\)?[- ]?)?[\d\- ]{10}$/.test(this.user_contact_mobile)
-    },
-
-    isErrors () {
-      return (!this.user_email || !this.isEmailValid || !this.isNumberValid)
-    }
-  }
+  mixins: [isEmailValid, isNumberValid, isContactErrors]
 }
 </script>
 
